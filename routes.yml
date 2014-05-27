@@ -1,6 +1,6 @@
 # routes.yml
 
-portada:
+home:
   path: /
   defaults: { _controller: 'Controller\ApplicationController::indexAction' }
 

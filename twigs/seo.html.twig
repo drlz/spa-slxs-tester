@@ -1,0 +1,31 @@
+{% if seo[activeRoute] is defined %}
+  <title>{{ seo[activeRoute]['title'] }} | Lab RTVE.es</title>
+  <meta name="description" content="{{ seo[activeRoute]['description'] }}">
+  <meta name="Keywords" content="{{ seo[activeRoute]['keywords'] }}">
+  <meta name="author" content="lab.rtve.es">
+  <meta property="og:title" content="{{ seo[activeRoute]['title'] }}">
+  <meta property="og:description" content="{{ seo[activeRoute]['description'] }}">
+  <meta property="og:url" content='http://lab.rtve.es{{ app.config.base_url }}'>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@rtve">
+  <meta name="twitter:creator" content="@lab_rtvees">
+  <meta name="twitter:title" content="{{ seo[activeRoute]['title'] }}">
+  <meta name="twitter:description" content="{{ seo[activeRoute]['description'] }}">
+  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[activeRoute]['seoImg'] }}.jpg">
+  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[activeRoute]['seoImg'] }}.jpg">
+{% else %}
+  <title>{{ seo[defaultRoute]['title'] }} | Lab RTVE.es</title>
+  <meta name="description" content="{{ seo[defaultRoute]['description'] }}">
+  <meta name="Keywords" content="{{ seo[defaultRoute]['keywords'] }}">
+  <meta name="author" content="lab.rtve.es">
+  <meta property="og:title" content="{{ seo[defaultRoute]['title'] }}">
+  <meta property="og:description" content="{{ seo[defaultRoute]['description'] }}">
+  <meta property="og:url" content='http://lab.rtve.es{{ app.config.base_url }}'>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@rtve">
+  <meta name="twitter:creator" content="@lab_rtvees">
+  <meta name="twitter:title" content="{{ seo[defaultRoute]['title'] }}">
+  <meta name="twitter:description" content="{{ seo[defaultRoute]['description'] }}">
+  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[defaultRoute]['seoImg'] }}.jpg">
+  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[defaultRoute]['seoImg'] }}.jpg">
+{% endif %}

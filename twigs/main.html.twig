@@ -1,11 +1,14 @@
-{% extends 'twigs/index.html.twig' %}
-{# import "modules/macro.html.twig" as macros #}
+{% extends twigFolder ~ '/index.html.twig' %}
 
 {% block content %}
   <aside role="main" id="main">
-    {% for twig in twigs %}
+
+    {% for twig in twigsArray %}
+
       {% if twig == activeRoute %}activa: {% endif %}
       {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' %}
+
     {% endfor %}
+
   </aside>
 {% endblock %}

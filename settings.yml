@@ -1,3 +1,23 @@
+# general configuration
 debug: true
-
 base_url: /newLabProy/
+
+silexUrls:
+  twigs: /twigs
+  sections: /twigs/sections
+
+defaultRoute: home
+enableMarkdown: false
+
+# data imports
+dataImports:
+      # Required import as it generates the routing system -> template at
+  seo:
+    url: seo.csv
+    format: csv
+    indexColumn: name
+    preprocess:
+
+
+# advanced configuration
+defaultControler: Controller\ApplicationController::indexAction
