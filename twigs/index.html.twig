@@ -42,7 +42,7 @@
   </main>
   <script>document.getElementById('seo-basico').innerHTML = '';</script>
 
-  <aside role="complementary">
+  <aside>
     {% block content %}No content{% endblock %}
   </aside>
 
@@ -58,6 +58,7 @@
     //var activeSect = {% if section is not defined %} "" {% else %} "{{ section }}" {% endif %};
     //var subSect = {% if year is not defined %} "" {% else %}"{{ year }}"{% endif %};
 
+        {# lab js framwork settings #}
     if(labTools && labTools.url) {
       labTools.url.data.baseUrl = '';
       labTools.url.data.baseUrlNO = '{{ app.config.base_url }}';
@@ -67,6 +68,15 @@
     if(labTools && labTools.console) {
       labTools.console.data.log = {% if app.config.debug %}false{% else %}true{% endif %};
     }
+
+        {# data imports #}
+    var proyData = proyData || {};
+    {% for elm in imports %}
+      {% if elm.exposeJS == true %}
+        proyData['{{ elm.title }}'] = {{ import[elm.title] | json_encode | raw }};
+      {% endif %}
+    {% endfor %}
+
 
     {% block js %}{% endblock %}
   </script>

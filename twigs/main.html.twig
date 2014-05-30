@@ -5,8 +5,7 @@
 
     {% for twig in twigsArray %}
 
-      {% if twig == activeRoute %}activa: {% endif %}
-      {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' %}
+      {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' with {'this': twig} %}
 
     {% endfor %}
 

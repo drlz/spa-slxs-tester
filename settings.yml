@@ -16,7 +16,16 @@ dataImports:
     url: seo.csv
     format: csv
     indexColumn: name
-    preprocess:
+    exposeJS: false
+    exposeTWIG: true
+#    preprocess:
+  songs:
+    url: https://docs.google.com/spreadsheets/d/1ZTJOMeTe7gbgK3oq30kNycMwRAGHNpa9vkfiJ4MZmJA/export?gid=0&format=csv
+    format: csv
+    indexColumn:
+    exposeJS: true
+    exposeTWIG: true
+#    preprocess: songprocessor
 
 
 # advanced configuration

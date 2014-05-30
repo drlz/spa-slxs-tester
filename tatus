@@ -1,0 +1,249 @@
+[1mdiff --git a/app/Controller/ApplicationController.php b/app/Controller/ApplicationController.php[m
+[1mindex 0a16693..753f2d1 100755[m
+[1m--- a/app/Controller/ApplicationController.php[m
+[1m+++ b/app/Controller/ApplicationController.php[m
+[36m@@ -10,15 +10,24 @@[m [mclass ApplicationController[m
+ {[m
+ [m
+     public function indexAction(Request $request, Application $app)[m
+[31m-    {	[m
+[31m-        return $app['twig']->render($app['config']['silexUrls']['twigs'] . '/main.html.twig', array([m
+[32m+[m[32m    {[m
+[32m+[m[32m        $data = array([m
+           'twigFolder' => $app['config']['silexUrls']['twigs'],[m
+           'twigsArray' => $app['sections'],[m
+           'sectionsFolder' => $app['sectionsFolder'],[m
+           'activeRoute' => $request->get("_route"),[m
+[31m-          'seo' => $app['dataLoader.seo'],[m
+[31m-          'defaultRoute' => $app['config']['defaultRoute'][m
+[31m-        ));[m
+[32m+[m[32m          'defaultRoute' => $app['config']['defaultRoute'],[m
+[32m+[m[32m          'imports' => $app['dataLoaded.imports'],[m
+[32m+[m[32m          'import' => array()[m
+[32m+[m[32m        );[m
+[32m+[m
+[32m+[m[32m        foreach ($app['dataLoaded.imports'] as $key => $value) {[m
+[32m+[m[32m          if($value['exposeTWIG'] || $value['exposeJS']) {[m
+[32m+[m[32m            $data['import'][$value['title']] = $app[$value['arrayName']];[m
+[32m+[m[32m          }[m
+[32m+[m[32m        };[m
+[32m+[m
+[32m+[m[32m        return $app['twig']->render($app['config']['silexUrls']['twigs'] . '/main.html.twig', $data);[m
+     }[m
+ [m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/app/Services/FileToArrayServiceProvider.php b/app/Services/FileToArrayServiceProvider.php[m
+[1mindex e9ac29b..151a3e0 100644[m
+[1m--- a/app/Services/FileToArrayServiceProvider.php[m
+[1m+++ b/app/Services/FileToArrayServiceProvider.php[m
+[36m@@ -56,6 +56,7 @@[m [mclass FiletoArrayServiceProvider {[m
+ 		// Variables[m
+ 		$firstLine = true;[m
+ 		$charsCat = array();[m
+[32m+[m		[32m$counter = 0;[m
+ [m
+ 		try {[m
+ [m
+[36m@@ -78,9 +79,15 @@[m [mclass FiletoArrayServiceProvider {[m
+ 			    for ($i=0; $i < count($cols); $i++) { [m
+ 			      $newRow[$cols[$i]] = trim($arr[$i]);[m
+ 			    }[m
+[31m-			    $charsCat[UrlHelper::getUrl($newRow[$columm])] = $newRow;[m
+[32m+[m[41m			    [m
+[32m+[m			[32m    if(!$columm) {[m
+[32m+[m			[41m    [m	[32m$charsCat[$counter] = $newRow;[m
+[32m+[m			[41m    [m	[32m$counter ++;[m
+[32m+[m			[32m    } else {[m
+[32m+[m			[41m    [m	[32m$charsCat[$newRow[$columm]] = $newRow;[m
+[32m+[m			[32m    }[m
+ 			  }[m
+[31m-			}				[m
+[32m+[m			[32m}[m
+ [m
+ [m
+ [m
+[36m@@ -89,7 +96,6 @@[m [mclass FiletoArrayServiceProvider {[m
+ 		}[m
+ [m
+ [m
+[31m-[m
+ 		return $charsCat;[m
+ 	}	[m
+ }[m
+[1mdiff --git a/index.php b/index.php[m
+[1mindex 4cf1c21..0144e3c 100755[m
+[1m--- a/index.php[m
+[1m+++ b/index.php[m
+[36m@@ -41,11 +41,16 @@[m [mif(count($app['config']['dataImports'])) {[m
+       $app['dataLoader.'.$title] = $import['preprocess']($app['dataLoader.'.$title]);[m
+     }[m
+ [m
+[31m-      // save the key to the external data to easily inject it at the controller[m
+[31m-    array_push($imports, array('title' => $title, 'arrayName' => 'dataloader'.$title));[m
+[32m+[m[32m      // save the reference of the imported files to easily inject it at the controller[m[41m[m
+[32m+[m[32m    array_push($imports, array([m[41m[m
+[32m+[m[32m      'title' => $title,[m[41m [m
+[32m+[m[32m      'arrayName' => 'dataLoader.'.$title,[m[41m [m
+[32m+[m[32m      'exposeJS' => isset($import['exposeJS']) ? $import['exposeJS'] : false,[m[41m[m
+[32m+[m[32m      'exposeTWIG' => isset($import['exposeTWIG']) ? $import['exposeTWIG'] : true[m[41m[m
+[32m+[m[32m    ));[m[41m[m
+   }[m
+ [m
+[31m-  $app['dataLoaded'] = $imports;[m
+[32m+[m[32m  $app['dataLoaded.imports'] = $imports;[m[41m[m
+ }[m
+ [m
+ //TWIG[m
+[1mdiff --git a/twigs/index.html.twig b/twigs/index.html.twig[m
+[1mindex c596978..847d0e5 100755[m
+[1m--- a/twigs/index.html.twig[m
+[1m+++ b/twigs/index.html.twig[m
+[36m@@ -42,7 +42,7 @@[m
+   </main>[m
+   <script>document.getElementById('seo-basico').innerHTML = '';</script>[m
+ [m
+[31m-  <aside role="complementary">[m
+[32m+[m[32m  <aside>[m
+     {% block content %}No content{% endblock %}[m
+   </aside>[m
+ [m
+[36m@@ -58,6 +58,7 @@[m
+     //var activeSect = {% if section is not defined %} "" {% else %} "{{ section }}" {% endif %};[m
+     //var subSect = {% if year is not defined %} "" {% else %}"{{ year }}"{% endif %};[m
+ [m
+[32m+[m[32m        {# lab js framwork settings #}[m
+     if(labTools && labTools.url) {[m
+       labTools.url.data.baseUrl = '';[m
+       labTools.url.data.baseUrlNO = '{{ app.config.base_url }}';[m
+[36m@@ -68,6 +69,15 @@[m
+       labTools.console.data.log = {% if app.config.debug %}false{% else %}true{% endif %};[m
+     }[m
+ [m
+[32m+[m[32m        {# data imports #}[m
+[32m+[m[32m    var proyData = proyData || {};[m
+[32m+[m[32m    {% for elm in imports %}[m
+[32m+[m[32m      {% if elm.exposeJS == true %}[m
+[32m+[m[32m        proyData['{{ elm.title }}'] = {{ import[elm.title] | json_encode | raw }};[m
+[32m+[m[32m      {% endif %}[m
+[32m+[m[32m    {% endfor %}[m
+[32m+[m
+[32m+[m
+     {% block js %}{% endblock %}[m
+   </script>[m
+ [m
+[1mdiff --git a/twigs/main.html.twig b/twigs/main.html.twig[m
+[1mindex 57b2988..4c7b250 100755[m
+[1m--- a/twigs/main.html.twig[m
+[1m+++ b/twigs/main.html.twig[m
+[36m@@ -5,8 +5,7 @@[m
+ [m
+     {% for twig in twigsArray %}[m
+ [m
+[31m-      {% if twig == activeRoute %}activa: {% endif %}[m
+[31m-      {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' %}[m
+[32m+[m[32m      {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' with {'this': twig} %}[m
+ [m
+     {% endfor %}[m
+ [m
+[1mdiff --git a/twigs/sections/home.html.twig b/twigs/sections/home.html.twig[m
+[1mindex 093156d..f420dd8 100755[m
+[1m--- a/twigs/sections/home.html.twig[m
+[1m+++ b/twigs/sections/home.html.twig[m
+[36m@@ -1,5 +1,8 @@[m
+[31m-<div id="sct-home" class="bl-sct sct-vid" data-url="{{ path('home') }}" >[m
+[32m+[m[32m{% set urlSect = import.seo[this]['url'] %}[m[41m[m
+ [m
+[31m-    Portada[m
+[32m+[m[32m<div id="sct-{{ this }}" class="bl-sct {% if this == activeRoute %}sct-act{% endif %}"{% if urlSect %} data-url="{{ import.seo[this]['url'] }}"{% endif %}>[m[41m[m
+ [m
+[31m-</div>[m
+[32m+[m[32m  <h1>Home ejemplo</h1>[m[41m[m
+[32m+[m[32m  <p>Borrame, gracias</p>[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m</div>[m
+\ No newline at end of file[m
+[1mdiff --git a/twigs/sections/section.html.twig b/twigs/sections/section.html.twig[m
+[1mindex 991146e..eb16bdc 100755[m
+[1m--- a/twigs/sections/section.html.twig[m
+[1m+++ b/twigs/sections/section.html.twig[m
+[36m@@ -1,5 +1,8 @@[m
+[31m-<div id="sct-sction" class="bl-sct sct-vid" data-url="{{ path('section') }}" >[m
+[32m+[m[32m{% set urlSect = import.seo[this]['url'] %}[m[41m[m
+ [m
+[31m-    Section1[m
+[32m+[m[32m<div id="sct-{{ this }}" class="bl-sct {% if this == activeRoute %}sct-act{% endif %}"{% if urlSect %} data-url="{{ import.seo[this]['url'] }}"{% endif %}>[m[41m[m
+ [m
+[31m-</div>[m
+[32m+[m[32m  <h1>Sección ejemplo 1</h1>[m[41m[m
+[32m+[m[32m  <p>Borrame, gracias</p>[m[41m[m
+[32m+[m[41m[m
+[32m+[m[32m</div>[m
+\ No newline at end of file[m
+[1mdiff --git a/twigs/sections/section312.html.twig b/twigs/sections/section312.html.twig[m
+[1mdeleted file mode 100755[m
+[1mindex ffaae8a..0000000[m
+[1m--- a/twigs/sections/section312.html.twig[m
+[1m+++ /dev/null[m
+[36m@@ -1,5 +0,0 @@[m
+[31m-<div id="sct-creditos" class="bl-sct sct-vid" data-url="{#{ path('credits') }#}" >[m
+[31m-[m
+[31m-    Section2[m
+[31m-[m
+[31m-</div>[m
+[1mdiff --git a/twigs/seo.html.twig b/twigs/seo.html.twig[m
+[1mindex 270d82e..71d04bf 100755[m
+[1m--- a/twigs/seo.html.twig[m
+[1m+++ b/twigs/seo.html.twig[m
+[36m@@ -1,31 +1,31 @@[m
+[31m-{% if seo[activeRoute] is defined %}[m
+[31m-  <title>{{ seo[activeRoute]['title'] }} | Lab RTVE.es</title>[m
+[31m-  <meta name="description" content="{{ seo[activeRoute]['description'] }}">[m
+[31m-  <meta name="Keywords" content="{{ seo[activeRoute]['keywords'] }}">[m
+[32m+[m[32m{% if import.seo[activeRoute] is defined %}[m[41m[m
+[32m+[m[32m  <title>{{ import.seo[activeRoute]['title'] }} | Lab RTVE.es</title>[m[41m[m
+[32m+[m[32m  <meta name="description" content="{{ import.seo[activeRoute]['description'] }}">[m[41m[m
+[32m+[m[32m  <meta name="Keywords" content="{{ import.seo[activeRoute]['keywords'] }}">[m[41m[m
+   <meta name="author" content="lab.rtve.es">[m
+[31m-  <meta property="og:title" content="{{ seo[activeRoute]['title'] }}">[m
+[31m-  <meta property="og:description" content="{{ seo[activeRoute]['description'] }}">[m
+[32m+[m[32m  <meta property="og:title" content="{{ import.seo[activeRoute]['title'] }}">[m[41m[m
+[32m+[m[32m  <meta property="og:description" content="{{ import.seo[activeRoute]['description'] }}">[m[41m[m
+   <meta property="og:url" content='http://lab.rtve.es{{ app.config.base_url }}'>[m
+   <meta name="twitter:card" content="summary">[m
+   <meta name="twitter:site" content="@rtve">[m
+   <meta name="twitter:creator" content="@lab_rtvees">[m
+[31m-  <meta name="twitter:title" content="{{ seo[activeRoute]['title'] }}">[m
+[31m-  <meta name="twitter:description" content="{{ seo[activeRoute]['description'] }}">[m
+[31m-  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[activeRoute]['seoImg'] }}.jpg">[m
+[31m-  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[activeRoute]['seoImg'] }}.jpg">[m
+[32m+[m[32m  <meta name="twitter:title" content="{{ import.seo[activeRoute]['title'] }}">[m[41m[m
+[32m+[m[32m  <meta name="twitter:description" content="{{ import.seo[activeRoute]['description'] }}">[m[41m[m
+[32m+[m[32m  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ import.seo[activeRoute]['seoImg'] }}.jpg">[m[41m[m
+[32m+[m[32m  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ import.seo[activeRoute]['seoImg'] }}.jpg">[m[41m[m
+ {% else %}[m
+[31m-  <title>{{ seo[defaultRoute]['title'] }} | Lab RTVE.es</title>[m
+[31m-  <meta name="description" content="{{ seo[defaultRoute]['description'] }}">[m
+[31m-  <meta name="Keywords" content="{{ seo[defaultRoute]['keywords'] }}">[m
+[32m+[m[32m  <title>{{ import.seo[defaultRoute]['title'] }} | Lab RTVE.es</title>[m[41m[m
+[32m+[m[32m  <meta name="description" content="{{ import.seo[defaultRoute]['description'] }}">[m[41m[m
+[32m+[m[32m  <meta name="Keywords" content="{{ import.seo[defaultRoute]['keywords'] }}">[m[41m[m
+   <meta name="author" content="lab.rtve.es">[m
+[31m-  <meta property="og:title" content="{{ seo[defaultRoute]['title'] }}">[m
+[31m-  <meta property="og:description" content="{{ seo[defaultRoute]['description'] }}">[m
+[32m+[m[32m  <meta property="og:title" content="{{ import.seo[defaultRoute]['title'] }}">[m[41m[m
+[32m+[m[32m  <meta property="og:description" content="{{ import.seo[defaultRoute]['description'] }}">[m[41m[m
+   <meta property="og:url" content='http://lab.rtve.es{{ app.config.base_url }}'>[m
+   <meta name="twitter:card" content="summary">[m
+   <meta name="twitter:site" content="@rtve">[m
+   <meta name="twitter:creator" content="@lab_rtvees">[m
+[31m-  <meta name="twitter:title" content="{{ seo[defaultRoute]['title'] }}">[m
+[31m-  <meta name="twitter:description" content="{{ seo[defaultRoute]['description'] }}">[m
+[31m-  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[defaultRoute]['seoImg'] }}.jpg">[m
+[31m-  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ seo[defaultRoute]['seoImg'] }}.jpg">[m
+[32m+[m[32m  <meta name="twitter:title" content="{{ import.seo[defaultRoute]['title'] }}">[m[41m[m
+[32m+[m[32m  <meta name="twitter:description" content="{{ import.seo[defaultRoute]['description'] }}">[m[41m[m
+[32m+[m[32m  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ import.seo[defaultRoute]['seoImg'] }}.jpg">[m[41m[m
+[32m+[m[32m  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ import.seo[defaultRoute]['seoImg'] }}.jpg">[m[41m[m
+ {% endif %}[m
+\ No newline at end of file[m

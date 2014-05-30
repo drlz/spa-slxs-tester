@@ -41,11 +41,16 @@ if(count($app['config']['dataImports'])) {
       $app['dataLoader.'.$title] = $import['preprocess']($app['dataLoader.'.$title]);
     }
 
-      // save the key to the external data to easily inject it at the controller
-    array_push($imports, array('title' => $title, 'arrayName' => 'dataloader'.$title));
+      // save the reference of the imported files to easily inject it at the controller
+    array_push($imports, array(
+      'title' => $title, 
+      'arrayName' => 'dataLoader.'.$title, 
+      'exposeJS' => isset($import['exposeJS']) ? $import['exposeJS'] : false,
+      'exposeTWIG' => isset($import['exposeTWIG']) ? $import['exposeTWIG'] : true
+    ));
   }
 
-  $app['dataLoaded'] = $imports;
+  $app['dataLoaded.imports'] = $imports;
 }
 
 //TWIG

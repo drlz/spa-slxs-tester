@@ -10,15 +10,24 @@ class ApplicationController
 {
 
     public function indexAction(Request $request, Application $app)
-    {	
-        return $app['twig']->render($app['config']['silexUrls']['twigs'] . '/main.html.twig', array(
+    {
+        $data = array(
           'twigFolder' => $app['config']['silexUrls']['twigs'],
           'twigsArray' => $app['sections'],
           'sectionsFolder' => $app['sectionsFolder'],
           'activeRoute' => $request->get("_route"),
-          'seo' => $app['dataLoader.seo'],
-          'defaultRoute' => $app['config']['defaultRoute']
-        ));
+          'defaultRoute' => $app['config']['defaultRoute'],
+          'imports' => $app['dataLoaded.imports'],
+          'import' => array()
+        );
+
+        foreach ($app['dataLoaded.imports'] as $key => $value) {
+          if($value['exposeTWIG'] || $value['exposeJS']) {
+            $data['import'][$value['title']] = $app[$value['arrayName']];
+          }
+        };
+
+        return $app['twig']->render($app['config']['silexUrls']['twigs'] . '/main.html.twig', $data);
     }
 
 }

@@ -1,5 +1,8 @@
-<div id="sct-home" class="bl-sct sct-vid" data-url="{{ path('home') }}" >
+{% set urlSect = import.seo[this]['url'] %}
 
-    Portada
+<div id="sct-{{ this }}" class="bl-sct {% if this == activeRoute %}sct-act{% endif %}"{% if urlSect %} data-url="{{ import.seo[this]['url'] }}"{% endif %}>
+
+  <h1>Home ejemplo</h1>
+  <p>Borrame, gracias</p>
 
 </div>

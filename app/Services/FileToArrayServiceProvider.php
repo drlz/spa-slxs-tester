@@ -56,6 +56,7 @@ class FiletoArrayServiceProvider {
 		// Variables
 		$firstLine = true;
 		$charsCat = array();
+		$counter = 0;
 
 		try {
 
@@ -78,16 +79,21 @@ class FiletoArrayServiceProvider {
 			    for ($i=0; $i < count($cols); $i++) { 
 			      $newRow[$cols[$i]] = trim($arr[$i]);
 			    }
-			    $charsCat[UrlHelper::getUrl($newRow[$columm])] = $newRow;
+			    
+			    if(!$columm) {
+			    	$charsCat[$counter] = $newRow;
+			    	$counter ++;
+			    } else {
+			    	$charsCat[$newRow[$columm]] = $newRow;
+			    }
 			  }
-			}				
+			}
 
 
 
 		} catch (Exception $e) {
 		    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 		}
-
 
 
 		return $charsCat;
