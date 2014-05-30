@@ -25,7 +25,7 @@ dataImports:
     indexColumn:
     exposeJS: true
     exposeTWIG: true
-#    preprocess: songprocessor
+    preprocess: myDataProcessorSample
 
 
 # advanced configuration

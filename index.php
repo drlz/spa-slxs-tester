@@ -1,17 +1,12 @@
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Routing\Loader\YamlFileLoader as YamlRouting;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Nicl\Silex\MarkdownServiceProvider;
 
 use Services\dataLoader;
 use Services\sectionsLoader;
-use Services\twigYearsToUrl;
 
 
 $app = new Silex\Application();
@@ -35,7 +30,9 @@ if(count($app['config']['dataImports'])) {
 
   foreach ($app['config']['dataImports'] as $title => $import) {
 
-    $app['dataLoader']->getData($import['url'], $title, $app, $import['format'], $import['indexColumn']); // -> nos genera $app['dataLoader.seo'] 
+    $column = isset($import['indexColumn']) ? $import['indexColumn'] : null;
+
+    $app['dataLoader']->getData($import['url'], $title, $app, $import['format'], $column); // -> nos genera $app['dataLoader.seo'] 
 
     if(isset($import['preprocess'])) { 
       $app['dataLoader.'.$title] = $import['preprocess']($app['dataLoader.'.$title]);
@@ -82,3 +79,12 @@ $app->error(function (\Exception $e, $code) use($app) {
 });
 
 $app->run();
+
+    // sample data preprocessing function (defined in the default settings.yml)
+    // ERASE ME
+function myDataProcessorSample($data) {
+
+  //print_R($data); die();
+
+  return $data;
+}
