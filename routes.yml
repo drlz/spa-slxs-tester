@@ -1,9 +1,0 @@
-# routes.yml
-
-home:
-  path: /
-  defaults: { _controller: 'Controller\ApplicationController::indexAction' }
-
-section:
-  path: /section/
-  defaults: { _controller: 'Controller\ApplicationController::indexAction' }
