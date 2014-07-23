@@ -2,23 +2,26 @@
 debug: true
 base_url: /newLabProy/
 
-silexUrls:
-  twigs: /twigs
-  sections: /twigs/sections
+# folders
+twigs: /twigs # main twigs folder
+sections: /twigs/sections # sections autoloader
 
-defaultRoute: home
+# base route -> required in seo.csv
+defaultRoute: home 
+
+# markdown processor
 enableMarkdown: false
 
-# data imports
+# REQUIRED # import as it generates the routing system -> template at
+routing:
+  url: seo.csv
+  format: csv
+  indexColumn: name
+  exposeJS: false
+  exposeTWIG: true
+
+# other data imports
 dataImports:
-      # Required import as it generates the routing system -> template at
-  seo:
-    url: seo.csv
-    format: csv
-    indexColumn: name
-    exposeJS: false
-    exposeTWIG: true
-#    preprocess:
   songs:
     url: https://docs.google.com/spreadsheets/d/1ZTJOMeTe7gbgK3oq30kNycMwRAGHNpa9vkfiJ4MZmJA/export?gid=0&format=csv
     format: csv

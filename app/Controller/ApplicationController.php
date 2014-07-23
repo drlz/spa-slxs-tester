@@ -12,12 +12,13 @@ class ApplicationController
     public function indexAction(Request $request, Application $app)
     {
         $data = array(
-          'twigFolder' => $app['config']['silexUrls']['twigs'],
+          'twigFolder' => $app['config']['twigs'],
           'twigsArray' => $app['sections'],
           'sectionsFolder' => $app['sectionsFolder'],
           'activeRoute' => $request->get("_route"),
           'defaultRoute' => $app['config']['defaultRoute'],
           'imports' => $app['dataLoaded.imports'],
+          'routing' => $app['routing'],
           'import' => array()
         );
 
@@ -27,7 +28,7 @@ class ApplicationController
           }
         };
 
-        return $app['twig']->render($app['config']['silexUrls']['twigs'] . '/main.html.twig', $data);
+        return $app['twig']->render($app['config']['twigs'] . '/main.html.twig', $data);
     }
 
 }

@@ -15,18 +15,32 @@ $app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/settings.
 
 $app['debug'] = $app['config']['debug'];
 
+
   // template loader
-$app['sectionsFolder'] = $app['config']['silexUrls']['sections'];
+$app['sectionsFolder'] = $app['config']['sections'];
 $app['sectionsLoader'] = function () { return new sectionsLoader(); };
 $app['sections'] = $app['sectionsLoader']->getSections($app, __DIR__ . $app['sectionsFolder']);
 
 
-  // Reading external data
+// Reading external data
+$imports = array();
+$app['dataLoader'] = function () { return new dataLoader(); };
+
+
+    // load routing data (REQUIRED)
+$column = isset($app['config']['routing']['indexColumn']) ? $app['config']['routing']['indexColumn'] : null;
+
+$app['dataLoader']->getData($app['config']['routing']['url'], 'seo', $app, $app['config']['routing']['format'], $column); // -> nos genera $app['dataLoader.seo'] 
+
+if(isset($app['config']['routing']['preprocess'])) {
+  $app['dataLoader.'.$title] = $app['config']['routing']['preprocess']($app['dataLoader.seo']);
+}
+
+$app['routing'] = $app['dataLoader.seo'];
+
+
+      // load other data import
 if(count($app['config']['dataImports'])) {
-
-  $imports = array();
-
-  $app['dataLoader'] = function () { return new dataLoader(); };
 
   foreach ($app['config']['dataImports'] as $title => $import) {
 
@@ -50,6 +64,7 @@ if(count($app['config']['dataImports'])) {
   $app['dataLoaded.imports'] = $imports;
 }
 
+
 //TWIG
 $app->register(new Silex\Provider\TwigServiceProvider(), array( 'twig.path' => __DIR__.'/', ));
 
@@ -59,22 +74,25 @@ $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     return $twig; 
 }));
 
+
   // MARKDOWN
 if($app['config']['enableMarkdown']) {
   $app->register(new MarkdownServiceProvider());
 }
 
+
   // ROUTING
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-foreach ($app['dataLoader.seo'] as $title => $url) {
+foreach ($app['routing'] as $title => $url) {
   $app->get($url['url'], $app['config']['defaultControler'])->bind($title);
 }
+
 
   // ERROR PAGE
 $app->error(function (\Exception $e, $code) use($app) {
   if(!$app['debug']) {
-    return new Response($app['twig']->render( $app['config']['silexUrls']['twigs'].'/error.html.twig'), $code);
+    return new Response($app['twig']->render( $app['config']['twigs'].'/error.html.twig'), $code);
   }
 });
 

@@ -18,7 +18,7 @@
 
     {# Grunt compile files #}
   <!-- build:css bin/styles.min.css -->
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
   <!-- endbuild -->
 
   <!-- build:js bin/app-pre.js -->
@@ -55,23 +55,26 @@
 
   <script>
 
-    //var activeSect = {% if section is not defined %} "" {% else %} "{{ section }}" {% endif %};
-    //var subSect = {% if year is not defined %} "" {% else %}"{{ year }}"{% endif %};
-
         {# lab js framwork settings #}
-    if(labTools && labTools.url) {
+    if(!labTools) var labTools = {};
+
+    if(labTools.url) {
       labTools.url.data.baseUrl = '';
       labTools.url.data.baseUrlNO = '{{ app.config.base_url }}';
       labTools.url.data.ga = {% if app.config.debug %}false{% else %}true{% endif %};
     }
 
     if(labTools && labTools.console) {
-      labTools.console.data.log = {% if app.config.debug %}false{% else %}true{% endif %};
+      labTools.console.data.log = {% if app.config.debug %}true{% else %}false{% endif %};
     }
 
         {# data imports #}
     var proyData = proyData || {};
-    {% for elm in imports %}
+
+    proyData['activeSect'] = {% if section is not defined %} "" {% else %} "{{ section }}" {% endif %};
+    proyData['subSect'] = {% if year is not defined %} "" {% else %}"{{ year }}"{% endif %};
+
+    {% for elm in imports %} {# elm #}
       {% if elm.exposeJS == true %}
         proyData['{{ elm.title }}'] = {{ import[elm.title] | json_encode | raw }};
       {% endif %}
