@@ -14,16 +14,20 @@ $app = new Silex\Application();
 
 $app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/settings.yml'));
 
+
 $app['debug'] = $app['config']['debug'];
 
-if(isset($app['config']['log'])) {
+
+  // Logger configuration
+if(isset($app['config']['log']) && $app['config']['log'] != false) {
 
   $app->register(new Silex\Provider\MonologServiceProvider(), array(
       'monolog.logfile' => __DIR__.$app['config']['log']
   ));
 
-  $app['monolog']->addDebug('Testing the Monolog logging.');
+  $app['monolog']->addDebug('----BOOTSTRAPING----');
 }
+
 
   // template loader
 $app['sectionsFolder'] = $app['config']['sections'];
