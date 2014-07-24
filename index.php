@@ -25,7 +25,7 @@ if(isset($app['config']['log']) && $app['config']['log'] != false) {
       'monolog.logfile' => __DIR__.$app['config']['log']
   ));
 
-  $app['monolog']->addDebug('----BOOTSTRAPING----');
+  $app['monolog']->addDebug('----BOOTSTRAPING APP----');
 }
 
 
@@ -41,6 +41,10 @@ $app['dataLoader'] = function () { return new dataLoader(); };
 
 
     // load routing data (REQUIRED)
+if(!isset($app['config']['routing']) || !isset($app['config']['routing'])) {
+  $app->abort(404, "No routing file found. Aborting");
+}
+
 $column = isset($app['config']['routing']['indexColumn']) ? $app['config']['routing']['indexColumn'] : null;
 
 $app['dataLoader']->getData($app['config']['routing']['url'], 'seo', $app, $app['config']['routing']['format'], $column); // -> nos genera $app['dataLoader.seo'] 

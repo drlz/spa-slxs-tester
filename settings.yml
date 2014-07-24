@@ -1,17 +1,16 @@
 # general configuration
 debug: true
 base_url: /newLabProy/
+enableMarkdown: false # markdown processor
 
 # folders
 twigs: /twigs # main twigs folder
 sections: /twigs/sections # sections autoloader
-log: false
+log: /log.log # use 'false' to disable logger
 
 # base route -> required in seo.csv
 defaultRoute: home 
 
-# markdown processor
-enableMarkdown: false
 
 # REQUIRED # import as it generates the routing system -> template at
 routing:
