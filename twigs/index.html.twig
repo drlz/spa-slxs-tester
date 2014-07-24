@@ -14,7 +14,7 @@
   {% include twigFolder ~ '/seo.html.twig' %}
 
   {# viewport info #}
-  <meta name="viewport" content="width=1100, user-scalable=no"/>
+  <meta name="viewport" content="width=1100, user-scalable=yes"/>
 
     {# Grunt compile files #}
   <!-- build:css bin/styles.min.css -->
@@ -42,7 +42,8 @@
   </main>
   <script>document.getElementById('seo-basico').innerHTML = '';</script>
 
-  <aside>
+    {# Aside Content, so it's not crawled #}
+  <aside role="main" id="main">
     {% block content %}No content{% endblock %}
   </aside>
 

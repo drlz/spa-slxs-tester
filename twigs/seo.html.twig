@@ -1,4 +1,5 @@
 {% if routing[activeRoute] is defined %}
+
   <title>{{ routing[activeRoute]['title'] }} | Lab RTVE.es</title>
   <meta name="description" content="{{ routing[activeRoute]['description'] }}">
   <meta name="Keywords" content="{{ routing[activeRoute]['keywords'] }}">
@@ -13,7 +14,9 @@
   <meta name="twitter:description" content="{{ routing[activeRoute]['description'] }}">
   <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
   <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
+
 {% else %}
+
   <title>{{ routing[initialRoute]['title'] }} | Lab RTVE.es</title>
   <meta name="description" content="{{ routing[initialRoute]['description'] }}">
   <meta name="Keywords" content="{{ routing[initialRoute]['keywords'] }}">
@@ -28,4 +31,5 @@
   <meta name="twitter:description" content="{{ routing[initialRoute]['description'] }}">
   <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
   <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
+
 {% endif %}
