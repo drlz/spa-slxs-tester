@@ -1,14 +1,15 @@
 # general configuration
 debug: true
 base_url: /newLabProy/
-enableMarkdown: false # markdown processor
+enableMarkdown: false           # markdown processor
 
 # folders
-twigs: /twigs # main twigs folder
-sections: /twigs/sections # sections autoloader
-log: /log.log # use 'false' to disable logger
+twigs: /twigs                   # main twigs folder
+sections: /twigs/sections       # sections autoloader
+log: /log.log                   # use 'false' to disable logger
 
-# REQUIRED # import as it generates the routing system -> template at
+# REQUIRED # import as it generates the routing system and the seo contents
+    # the data uses this structure: https://docs.google.com/spreadsheet/ccc?key=0AtJGbTMFIBvQdDJKMzhmMHVZNGRhYmNSc2FyYWZTTlE&usp=sharing
 routing:
   url: routes.csv
   format: csv
@@ -17,7 +18,8 @@ routing:
   exposeTWIG: true
   initialRoute: home
 
-# other data imports
+# data imports => use this to use external data files (csv and json) directly into your twig or js
+    # url can be a local or external file
 dataImports:
   songs:
     url: https://docs.google.com/spreadsheets/d/1ZTJOMeTe7gbgK3oq30kNycMwRAGHNpa9vkfiJ4MZmJA/export?gid=0&format=csv
