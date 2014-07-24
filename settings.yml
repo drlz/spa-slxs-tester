@@ -1,7 +1,7 @@
 # general configuration
 debug: true
 base_url: /newLabProy/
-enableMarkdown: false           # markdown processor
+enableMarkdown: true            # markdown processor
 
 # folders
 twigs: /twigs                   # main twigs folder
