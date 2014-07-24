@@ -61,7 +61,7 @@
 
     if(labTools.url) {
       labTools.url.data.baseUrl = '';
-      labTools.url.data.baseUrlNO = '{{ app.config.base_url }}';
+      labTools.url.data.baseUrlNO = '{{ base_url }}';
       labTools.url.data.ga = {% if app.config.debug %}false{% else %}true{% endif %};
     }
 
