@@ -13,8 +13,7 @@ class ApplicationController
     {
         $data = array(
           'twigFolder' => $app['config']['twigs'],
-          'twigsArray' => $app['sections'],
-          'sectionsFolder' => $app['sectionsFolder'],
+          'sectionsLoader' => $app['autoloader'],
           'activeRoute' => $request->get("_route"),
           'initialRoute' => $app['config']['routing']['initialRoute'],
           'imports' => $app['dataLoaded.imports'],

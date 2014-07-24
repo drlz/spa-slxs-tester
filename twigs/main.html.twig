@@ -1,11 +1,11 @@
 {% extends twigFolder ~ '/index.html.twig' %}
 
 {% block content %}
-
-    {% for twig in twigsArray %}
-
-      {% include sectionsFolder ~ '/' ~ twig ~ '.html.twig' with {'this': twig} %}
-
-    {% endfor %}
+    
+    {# include all the templates configured in settings.html.yml #}
+  {% include twigFolder ~ '/autoloaders.html.twig' %}
+    {# or each loader individually
+  {% include twigFolder ~ '/autoloader.html.twig' with {'section': SectionName} %}
+    #}
 
 {% endblock %}

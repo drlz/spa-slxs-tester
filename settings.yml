@@ -5,8 +5,12 @@ enableMarkdown: false           # markdown processor
 
 # folders
 twigs: /twigs                   # main twigs folder
-sections: /twigs/autoload       # sections autoloader
 log: /log.log                   # use 'false' to disable logger
+
+# template autoloader
+autoloader:
+  autoload: /twigs/autoload
+  autoload2: /twigs/autoload2
 
 # REQUIRED # import as it generates the routing system and the seo contents
     # the data uses this structure: https://docs.google.com/spreadsheet/ccc?key=0AtJGbTMFIBvQdDJKMzhmMHVZNGRhYmNSc2FyYWZTTlE&usp=sharing
