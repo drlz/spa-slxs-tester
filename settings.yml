@@ -32,6 +32,13 @@ dataImports:
     exposeJS: true
     exposeTWIG: true
     preprocess: myDataProcessorSample
+  seo:
+    url: routes.csv
+    format: csv
+    indexColumn:
+    exposeJS: true
+    exposeTWIG: true
+    preprocess:
 
 
 # advanced configuration
