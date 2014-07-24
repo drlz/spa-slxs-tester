@@ -6,14 +6,14 @@
   <meta name="author" content="lab.rtve.es">
   <meta property="og:title" content="{{ routing[activeRoute]['title'] }}">
   <meta property="og:description" content="{{ routing[activeRoute]['description'] }}">
-  <meta property="og:url" content='http://lab.rtve.es{{ app.config.base_url }}'>
+  <meta property="og:url" content='http://lab.rtve.es{{ base_url }}'>
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@rtve">
   <meta name="twitter:creator" content="@lab_rtvees">
   <meta name="twitter:title" content="{{ routing[activeRoute]['title'] }}">
   <meta name="twitter:description" content="{{ routing[activeRoute]['description'] }}">
-  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
-  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
+  <meta property="og:image" content="http://lab.rtve.es{{ base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
+  <meta name="twitter:image" content="http://lab.rtve.es{{ base_url }}img/seo/{{ routing[activeRoute]['seoImg'] }}.jpg">
 
 {% else %}
 
@@ -29,7 +29,7 @@
   <meta name="twitter:creator" content="@lab_rtvees">
   <meta name="twitter:title" content="{{ routing[initialRoute]['title'] }}">
   <meta name="twitter:description" content="{{ routing[initialRoute]['description'] }}">
-  <meta property="og:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
-  <meta name="twitter:image" content="http://lab.rtve.es{{ app.config.base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
+  <meta property="og:image" content="http://lab.rtve.es{{ base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
+  <meta name="twitter:image" content="http://lab.rtve.es{{ base_url }}img/seo/{{ routing[initialRoute]['seoImg'] }}.jpg">
 
 {% endif %}
