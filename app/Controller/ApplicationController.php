@@ -16,7 +16,7 @@ class ApplicationController
           'twigsArray' => $app['sections'],
           'sectionsFolder' => $app['sectionsFolder'],
           'activeRoute' => $request->get("_route"),
-          'defaultRoute' => $app['config']['defaultRoute'],
+          'initialRoute' => $app['config']['routing']['initialRoute'],
           'imports' => $app['dataLoaded.imports'],
           'routing' => $app['routing'],
           'import' => array()

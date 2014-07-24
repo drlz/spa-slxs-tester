@@ -8,10 +8,6 @@ twigs: /twigs # main twigs folder
 sections: /twigs/sections # sections autoloader
 log: /log.log # use 'false' to disable logger
 
-# base route -> required in seo.csv
-defaultRoute: home 
-
-
 # REQUIRED # import as it generates the routing system -> template at
 routing:
   url: routes.csv
@@ -19,6 +15,7 @@ routing:
   indexColumn: name
   exposeJS: false
   exposeTWIG: true
+  initialRoute: home
 
 # other data imports
 dataImports:
