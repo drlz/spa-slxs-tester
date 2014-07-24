@@ -4,6 +4,7 @@ require_once __DIR__.'/vendor/autoload.php';
 use Symfony\Component\HttpFoundation\Response;
 
 use Nicl\Silex\MarkdownServiceProvider;
+use Monolog\Logger;
 
 use Services\dataLoader;
 use Services\sectionsLoader;
@@ -15,6 +16,14 @@ $app->register(new DerAlex\Silex\YamlConfigServiceProvider(__DIR__ . '/settings.
 
 $app['debug'] = $app['config']['debug'];
 
+if(isset($app['config']['log'])) {
+
+  $app->register(new Silex\Provider\MonologServiceProvider(), array(
+      'monolog.logfile' => __DIR__.$app['config']['log']
+  ));
+
+  $app['monolog']->addDebug('Testing the Monolog logging.');
+}
 
   // template loader
 $app['sectionsFolder'] = $app['config']['sections'];

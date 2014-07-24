@@ -5,6 +5,7 @@ base_url: /newLabProy/
 # folders
 twigs: /twigs # main twigs folder
 sections: /twigs/sections # sections autoloader
+log: /log.log
 
 # base route -> required in seo.csv
 defaultRoute: home 
