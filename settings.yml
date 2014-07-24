@@ -5,7 +5,7 @@ enableMarkdown: false           # markdown processor
 
 # folders
 twigs: /twigs                   # main twigs folder
-sections: /twigs/sections       # sections autoloader
+sections: /twigs/autoload       # sections autoloader
 log: /log.log                   # use 'false' to disable logger
 
 # REQUIRED # import as it generates the routing system and the seo contents
