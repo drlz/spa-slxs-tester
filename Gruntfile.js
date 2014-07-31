@@ -72,12 +72,13 @@ module.exports = function(grunt) {
         files: [
           {src: [
             '.htaccess',
-            './vendor/**',
+            './src/**',
             './font/**',
             './twigs/**',
+            './vendor/**',
             './app/**',
             './index.php',
-            './routes.yml',
+            './routes.csv',
             './settings.yml'],
             dest: '../newLabProyCompiled/', filter: 'isFile'},
         ]
