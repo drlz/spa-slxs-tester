@@ -23,9 +23,8 @@ return array(
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Pimple' => array($vendorDir . '/pimple/pimple/lib'),
     'Nicl' => array($vendorDir . '/nicl/silex-markdown/src'),
-    'Monolog' => array($vendorDir . '/monolog/monolog/src'),
     'Doctrine\\DBAL' => array($vendorDir . '/doctrine/dbal/lib'),
     'Doctrine\\Common' => array($vendorDir . '/doctrine/common/lib'),
     'DerAlex\\Silex' => array($vendorDir . '/deralex/yaml-config-service-provider/src'),
-    '' => array($baseDir . '/app'),
+    '' => array($baseDir . '/src'),
 );
